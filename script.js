@@ -6,21 +6,28 @@ function getCurrentAffairs() {
     const apiKey = '94a3c57222ea44059d50efe02878e8cc'; // Provided News API key
     const timestamp = new Date().getTime(); // Add timestamp to prevent caching
     const apiUrl = `https://newsapi.org/v2/top-headlines?country=in&category=general&apiKey=${apiKey}&_=${timestamp}`;
-    
-    console.log('Fetching current affairs from API...');
 
+    console.log('Fetching current affairs from API...');
+    
     fetch(apiUrl)
         .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.statusText}`);
+            }
             console.log('Received response from API:', response);
             return response.json();
         })
         .then(data => {
+            if (!data.articles || data.articles.length === 0) {
+                throw new Error('No articles found in the API response.');
+            }
             console.log('Parsed JSON data:', data);
             const shuffledArticles = shuffleArray(data.articles);
             displayCurrentAffairs(shuffledArticles);
         })
         .catch(error => {
             console.error('Error fetching current affairs:', error);
+            alert('Failed to fetch current affairs. Please try again later.');
         });
 }
 
