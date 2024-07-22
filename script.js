@@ -14,14 +14,12 @@ function getCurrentAffairs() {
             if (!response.ok) {
                 throw new Error(`Network response was not ok: ${response.statusText}`);
             }
-            console.log('Received response from API:', response);
             return response.json();
         })
         .then(data => {
             if (!data.articles || data.articles.length === 0) {
                 throw new Error('No articles found in the API response.');
             }
-            console.log('Parsed JSON data:', data);
             const shuffledArticles = shuffleArray(data.articles);
             displayCurrentAffairs(shuffledArticles);
         })
